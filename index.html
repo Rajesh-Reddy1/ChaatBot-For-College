@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<head>
+    <title>BVRIT</title>
+</head>
+
+<body>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <div class="title" <svg viewBox="0 0 640 512" title="Chatbot">
+        <path fill="currentColor" d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z"
+        />
+        </svg>
+        <div>
+            <div id="chatbot" class="main-card collapsed">
+                <button id="chatbot_toggle">
+          <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15 4v7H5.17l-.59.59-.58.58V4h11m1-2H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm5 4h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </svg>
+        </button>
+                <div class="main-title">
+                    <div>
+                        <svg viewBox="0 0 640 512" title="robot">
+              <path fill="currentColor" d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z" />
+            </svg>
+                    </div>
+
+                </div>
+                <div class="chat-area" id="message-box">
+                </div>
+                <div class="line"></div>
+                <div class="input-div">
+                    <input class="input-message" name="message" type="text" id="message" placeholder="Type your message ..." />
+                    <button class="input-send" onclick="send()">
+            <svg style="width:24px;height:24px">
+              <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+            </svg>
+          </button>
+                </div>
+            </div>
+
+
+            <script>
+                var running = false;
+
+                function send() {
+                    if (running == true) return;
+                    var msg = document.getElementById("message").value;
+                    if (msg == "") return;
+                    running = true;
+                    addMsg(msg);
+                    addResponseMsg(msg)
+                    window.setTimeout(eval, 200, "next(" + msg.toLowerCase() + ")")
+                }
+
+                function addMsg(msg) {
+                    var div = document.createElement("div");
+                    div.innerHTML =
+                        "<span style='flex-grow:1'></span><div class='chat-message-sent'>" +
+                        msg +
+                        "</div>";
+                    div.className = "chat-message-div";
+                    document.getElementById("message-box").appendChild(div);
+                    document.getElementById("message").value = "";
+                    document.getElementById("message-box").scrollTop = document.getElementById(
+                        "message-box"
+                    ).scrollHeight;
+                }
+
+
+                function addResponseMsg(msg) {
+                    var div = document.createElement("div");
+                    div.innerHTML = "<div class='chat-message-received'>" + msg + "</div>";
+                    div.className = "chat-message-div";
+                    document.getElementById("message-box").appendChild(div);
+                    document.getElementById("message-box").scrollTop = document.getElementById(
+                        "message-box"
+                    ).scrollHeight;
+                    running = false;
+                }
+
+                function addOptions(opt) {
+                    var div = document.createElement("div");
+                    div.innerHTML = "<div class='chat-message-received'><button class='btn-1' onclick='next(" + opt + ")'><span>" + opt + "</span></button></div>";
+                    div.className = "chat-message-div";
+                    document.getElementById("message-box").appendChild(div);
+                    document.getElementById("message-box").scrollTop = document.getElementById(
+                        "message-box"
+                    ).scrollHeight;
+                    // running = false;
+                }
+
+                function next(arr) {
+                    if (typeof arr == "string") {
+                        window.open(arr, "_blank")
+                        return
+                    } else {
+                        addResponseMsg(arr[0])
+                        for (let index = 1; index < arr.length; index++) {
+                            addOptions(arr[index]);
+
+                        }
+                        return
+                    }
+                    if (typeof arr !== 'undefined') {
+                        addResponseMsg("Enter Valid Option")
+                        return
+                    }
+
+                }
+                document.getElementById("message").addEventListener("keyup", function(event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                        send();
+                    }
+                });
+                document.getElementById("chatbot_toggle").onclick = function() {
+                    if (document.getElementById("chatbot").classList.contains("collapsed")) {
+                        document.getElementById("chatbot").classList.remove("collapsed")
+                        document.getElementById("chatbot_toggle").children[0].style.display = "none"
+                        document.getElementById("chatbot_toggle").children[1].style.display = ""
+                            // setTimeout(addResponseMsg, 1000, "Hi")
+                        addResponseMsg("Hello..! <br> Welcome To BVRIT")
+                        setTimeout(next, 500, operatos)
+                    } else {
+                        document.getElementById("chatbot").classList.add("collapsed")
+                        document.getElementById("chatbot_toggle").children[0].style.display = ""
+                        document.getElementById("chatbot_toggle").children[1].style.display = "none"
+                    }
+                }
+            </script>
+            <script>
+                let operatos = [
+                    "May I know Who You Are?",
+                    "student",
+                    "parent"
+
+                ]
+                let student = [
+                    "Please select one option",
+                    "student_login",
+                    "academics",
+                    "departments",
+                    "placements",
+                    "transport",
+                    "contacts"
+                ]
+                let parent = [
+                    "Please select one option",
+                    "parent_login",
+                    "placements",
+                    "academics",
+                    "contacts"
+
+                ]
+                let departments = [
+                    "Please select one option",
+                    "cse",
+                    "Ece",
+                    "Eee",
+                    "It",
+                    "Civil_Engineering",
+                    "Chemical_Engineering",
+                    "Mech",
+                    "Phe",
+                    "Bme"
+
+                ]
+                let student_login = "https://www.bvrit.edu.in"
+                let parent_login = "ttps://www.bvrit.edu.in "
+                let academics = " https://bvrit.ac.in/"
+                let placements = "https://bvrit.ac.in/placements/training-and-placement-cell "
+                let contacts = "https://bvrit.ac.in/contactus "
+                let transport = "https://bvrit.ac.in/transportlink"
+                let cse = "https://bvrit.ac.in/cse-overview"
+                let Ece = "https://bvrit.ac.in/ece-overview"
+                let Eee = "https://bvrit.ac.in/eee-overview"
+                let It = "https://bvrit.ac.in/it-overview"
+                let Civil_Engineering = "https://bvrit.ac.in/civil-overview"
+                let Chemical_Engineering = "https://bvrit.ac.in/chemical-overview"
+                let Mech = "https://bvrit.ac.in/mech-overview"
+                let Phe = "https://bvrit.ac.in/phe-overview"
+                let Bme = "https://bvrit.ac.in/bme-overview"
+            </script>
+
+</body>
+
+</html>
